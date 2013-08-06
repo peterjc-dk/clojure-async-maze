@@ -16,6 +16,7 @@
   :profiles {:dev
              {:dependencies [[midje "1.5.1"]
                              [bultitude "0.1.7"]
+                             [criterium "0.4.1"]
                              ;; <<<<==== fix
                              [lein-midje "3.1.0"]]
               :plugins [[lein-midje "3.1.0"]]}})

@@ -5,7 +5,7 @@
  {
   :standard-out
   {:min-level nil
-   :enabled? true
+   :enabled? false
    :async? false
    :limit-per-msecs nil
    :format-fn :str-edn-short-format-fn}
@@ -19,7 +19,7 @@
 
   :spit-edn
   {:min-level nil
-   :enabled? true
+   :enabled? false
    :async? false
    :limit-per-msecs nil
    :format-fn :edn-format-fn}}}
