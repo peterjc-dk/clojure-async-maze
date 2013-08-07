@@ -7,7 +7,8 @@
   "given a action chan return next state id"
   [in-chan quit-chan maze start-state]
   (let [out-chan (as/chan)
-        _ (log/debug "Start action to state handler")]
+        _ (log/debug "Start action to state handler")
+        _ (as/go (as/>! out-chan [:arrow-walk 0 0]))]
     (as/go (loop [state start-state]
              (let [[v ch] (as/alts! [quit-chan in-chan])]
                (cond (= ch in-chan)

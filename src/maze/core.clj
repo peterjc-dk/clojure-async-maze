@@ -38,7 +38,7 @@
 (defn inner-main [columns rows]
   (let [arrows #{"Up" "Down" "Left" "Right"}
         quit-key #{"q" "Q"}
-
+        goal-index (dec (* columns rows))
         [q1-out q2-out q3-out q4-out q5-out] [(as/chan) (as/chan) (as/chan) (as/chan) (as/chan)]
         quit-bc-ch-out (as-lab/broadcast q1-out q2-out q3-out q4-out q5-out)
 
@@ -57,13 +57,18 @@
         ;st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in st3-ch-in])
         st-all-ch-in (util/fan-in [st1-ch-in])
         ]
-    (swing-gui/change-gui labels st-all-ch-in q5-out)
+    (as/go (as/>! quit-bc-ch-out
+                  (as/<!
+                   (swing-gui/change-gui labels
+                                         st-all-ch-in
+                                         q5-out
+                                         goal-index))))
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
     (log/debug "Main done")))
 
-(System/setProperty "apple.laf.useScreenMenuBar" "true")
+;(System/setProperty "apple.laf.useScreenMenuBar" "true")
 
-(System/setProperty "com.apple.mrj.application.apple.menu.about.name" "TestHest")
+;(System/setProperty "com.apple.mrj.application.apple.menu.about.name" "TestHest")
 
 ;; TODO fix this
 (defn -main
@@ -71,7 +76,7 @@
   [& args]
   ;; work around dangerous default behaviour in Clojure
   (alter-var-root #'*read-eval* (constantly false))
-  (inner-main 44 33))
+  (inner-main 15 10))
 
 (comment
   (inner-main 44 25)

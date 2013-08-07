@@ -124,7 +124,7 @@ return a icon scaled to the size of the label"
 
 ;((saw/dialog :content "hello"))
 ;(-> (dialog :content form) pack! show!)
-;(-> (saw/dialog :content "JUHU") saw/pack! saw/show!)
+;
 (defn switch-state
   "Given old and new state update labels"
   [labels agent old-state new-state]
@@ -137,12 +137,15 @@ return a icon scaled to the size of the label"
 (defn init-state
   "Given init the given label"
   [labels state]
-  (let [label (nth labels state)]
-    (change-label label :init)))
+  ((let [label (nth labels state)
+         bg-color (saw/config label :background)
+         _ (println "BG:" bg-color) ]
+     (when (= bg-color :black)
+       (change-label label :init)))))
 
 (defn draw-maze
   "Given the labels and a chan with events update gui"
-  [labels maze quit-chan timeout]
+  [labels maze quit-chan timeout goal-index]
   (let [_ (log/debug "Draw Maze START")
         states (set (range (count (- labels 1))))
         [c r] [(:columns maze) (:rows maze)]
@@ -152,9 +155,11 @@ return a icon scaled to the size of the label"
      (loop [state start-state path (rest (:path maze))]
        (let [[v ch] (as/alts! [quit-chan (as/timeout timeout)])]
          (cond (or (empty? path) (= ch quit-chan))
-               (log/info {:agent :draw-maze
-                          :action :stop
-                          :allert "Drawing maze stopped"})
+               (do
+                 (log/info {:agent :draw-maze
+                            :action :stop
+                            :allert "Drawing maze stopped"})
+                 )
                :else
                (let [new-state (state/position-to-index (first path) [c r])]
                  (log/info {:agent :draw-maze
@@ -163,27 +168,40 @@ return a icon scaled to the size of the label"
                    (init-state labels new-state))
                  (recur new-state (rest path)))))))))
 
+(defn are-we-there-yet?
+  "Check if the new state is the goal state"
+  [state goal]
+  (if (= state goal)
+    (do (-> (saw/dialog :content "We are there")
+            saw/pack!
+            saw/show!)
+        true)
+   false))
+
 (defn change-gui
   "Given the labels and a chan with events update gui"
-  [labels in-chan quit-chan]
+  [labels in-chan quit-chan goal-index]
   (let [_ (log/debug "GUI handler START")
         states (set (range (count labels)))
         ;_ (switch-state labels 0 0) ;; TODO fix this hard coding
-        _ (change-label (last labels) :goal) ;; TODO goal is TDB
+        _ (change-label (nth labels goal-index) :goal) ;; TODO goal is TDB
         ]
     (as/go
      (loop []
        (let [[v ch] (as/alts! [quit-chan in-chan])]
          (cond (= ch quit-chan)
-               (log/info {:agent :change-gui
-                          :action :stop
-                          :allert "Stop change GUI go-loop"})
+               (do (log/info {:agent :change-gui
+                           :action :stop
+                              :allert "Stop change GUI go-loop"})
+                   :stop)
                :else
                (let [[agent old-state new-state] v]
                  (log/info {:agent :change-gui
                             :action [agent old-state new-state]})
                  (when (contains? states new-state)
-                   (switch-state labels agent old-state new-state))
-                 (recur))))))))
+                   (switch-state labels agent old-state new-state)
+                   (if-not (are-we-there-yet? new-state goal-index)
+                     (recur)
+                     :stop)))))))))
 
 ;:param-string (.paramString event)
