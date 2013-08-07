@@ -67,7 +67,6 @@
     (log/debug "Main done")))
 
 ;(System/setProperty "apple.laf.useScreenMenuBar" "true")
-
 ;(System/setProperty "com.apple.mrj.application.apple.menu.about.name" "TestHest")
 
 ;; TODO fix this
@@ -77,8 +76,3 @@
   ;; work around dangerous default behaviour in Clojure
   (alter-var-root #'*read-eval* (constantly false))
   (inner-main 15 10))
-
-(comment
-  (inner-main 44 25)
-  (-main)
-)

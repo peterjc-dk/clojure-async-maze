@@ -8,23 +8,23 @@ List of things to do on the Maze
 ** TODO Investigate cpu hugging
    SCHEDULED: <2013-08-08 Thu>
 *** TODO make more jvisualvm  studies
-*** TODO optimize icon switcing
+*** DONE optimize icon switcing
 
-** TODO Finish arrow test
+** DONE Finish arrow test
 ** TODO Test the quit channel
 
 ** TODO Test log read back.
-*** TODO Randomize maze generation root
+*** DONE Randomize maze generation root
 *** TODO Solution generator
-*** TODO Animate maze generation
-*** TODO X at the goal
-*** TODO Detect when at the goal
-*** TODO pop up a start again
+*** DONE Animate maze generation
+*** DONE X at the goal
+*** IN-PROGRESS Detect when at the goal
+*** IN-PROGRESS pop up a start again
 
 ** TODO Builder
 *** TODO disable logging
 *** TODO icon
-*** get ant stuff in git (sub dir)
+*** TODO get ant stuff in git (sub dir)
 
 
 
