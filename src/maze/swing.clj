@@ -128,7 +128,7 @@ return a icon scaled to the size of the label"
   "Given the labels and a chan with events update gui"
   [labels maze quit-chan timeout]
   (let [_ (log/debug "Draw Maze START")
-        states (set (range (count labels)))
+        states (set (range (count (- labels 1))))
         [c r] [(:columns maze) (:rows maze)]
         start-state (state/position-to-index (first (:path maze)) [c r])
         _ (init-state labels start-state)]
@@ -163,11 +163,11 @@ return a icon scaled to the size of the label"
                           :action :stop
                           :allert "Stop change GUI go-loop"})
                :else
-               (let [[old-state new-state] v]
+               (let [[agent old-state new-state] v]
                  (log/info {:agent :change-gui
-                            :action [old-state new-state]})
+                            :action [agent old-state new-state]})
                  (when (contains? states new-state)
-                   (switch-state labels old-state new-state))
+                   (switch-state labels agent old-state new-state))
                  (recur))))))))
 
 ;:param-string (.paramString event)

@@ -19,6 +19,6 @@
                        (log/info {:agent :ramdom-walk
                                   :action rand-action
                                   :state next-state})
-                       (as/>! out-chan [state next-state])
+                       (as/>! out-chan [:ramdom-walk state next-state])
                        (recur next-state))))))
     out-chan))

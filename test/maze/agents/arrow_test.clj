@@ -11,8 +11,8 @@
 (defn try-arrow
   "Start the arrow agent and make asserts"
   []
-  (let [maze (generate/generate-maze [(+ 1 (rand-int 50)) (+ 1 (rand-int 50))])
-        sample-size 1000
+  (let [maze (generate/generate-maze [(+ 1 (rand-int 20)) (+ 1 (rand-int 20))])
+        sample-size 100
         board-size  (count (:board maze))
         pos-set (set (range board-size))
         start-state (rand-int board-size)
@@ -21,10 +21,12 @@
         in-chan (util/sq-2-chan sample-list)
         rc (arrow/arrow-to-state in-chan qc maze start-state)
         ls (util/ch-2-lazy-timeout rc 200)]
-    (and (every? #(contains? pos-set %)
+    (and (every? #(= :arrow-walk %)
                  (map first (take sample-size ls)))
          (every? #(contains? pos-set %)
-                 (map second (take sample-size ls))))))
+                 (map second (take sample-size ls)))
+         (every? #(contains? pos-set %)
+                 (map last (take sample-size ls))))))
 
 (test/deftest test-arrow-walker
   (dotimes [n 10]

@@ -15,7 +15,7 @@
                        (log/info {:agent :arrow-walk
                                   :action v
                                   :state next-state})
-                       (as/>! out-chan [state next-state])
+                       (as/>! out-chan [:arrow-walk state next-state])
                        (recur next-state))
                      (= ch quit-chan)
                      (do (log/info "stopped action handler"))))))

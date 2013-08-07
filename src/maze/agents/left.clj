@@ -27,7 +27,7 @@
     (as/go (loop [state start-state action :up]
              (let [[v ch] (as/alts! [quit-chan (as/timeout timeout)])]
                (cond (= ch quit-chan)
-                     (log/info {:agent :go-left
+                     (log/info {:agent :left-walk
                                 :action :stop
                                 :allert "stopped action handler"})
                      :else
@@ -35,9 +35,9 @@
                                        state action maze)
                            next-action (get-next-action state new-state action)
                            ]
-                       (log/info {:agent :go-left
+                       (log/info {:agent :left-walk
                                   :action action
                                   :state new-state})
-                       (as/>! out-chan [state new-state])
+                       (as/>! out-chan [:left-walk state new-state])
                        (recur new-state next-action))))))
     out-chan))
