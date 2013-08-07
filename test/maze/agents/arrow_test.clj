@@ -11,23 +11,21 @@
 (defn try-arrow
   "Start the arrow agent and make asserts"
   []
-  (let [_ (println "Try Arrow")
-        maze (generate/generate-maze [(+ 1 (rand-int 50)) (+ 1 (rand-int 50))])
-        sample-size 1
+  (let [maze (generate/generate-maze [(+ 1 (rand-int 50)) (+ 1 (rand-int 50))])
+        sample-size 1000
         board-size  (count (:board maze))
         pos-set (set (range board-size))
         start-state (rand-int board-size)
+        sample-list (repeatedly (+ 10 sample-size) (fn [] (rand-nth [:left :up :down :right])))
         qc (as/chan)
-        _ (println "hello")
-        in-chan (util/sq-2-chan [:left :right])
+        in-chan (util/sq-2-chan sample-list)
         rc (arrow/arrow-to-state in-chan qc maze start-state)
-        ls (util/chan-2-lazy-seq rc)]
+        ls (util/ch-2-lazy-timeout rc 200)]
     (and (every? #(contains? pos-set %)
-                 (map first (take sample-size (ls))))
+                 (map first (take sample-size ls)))
          (every? #(contains? pos-set %)
-        (map second (take sample-size (ls)))))))
+                 (map second (take sample-size ls))))))
 
-(println (try-arrow))
 (test/deftest test-arrow-walker
   (dotimes [n 10]
     (m/fact (try-arrow) => true)))

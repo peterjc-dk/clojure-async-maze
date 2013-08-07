@@ -55,40 +55,36 @@
   "given size [columns rows] a maze is generated"
   [[columns rows]]
   (let [empty-board (generate-empty-board [columns rows])
+        start-column (rand-int (- columns 1))
+        start-row (rand-int rows)
         start-frontier [{:action :right
-                        :from [0 0]
-                        :to [1 0]}]]
-    (loop [visited #{[0 0]}
+                        :from [start-column start-row]
+                        :to [(+ 1 start-column) start-row]}]]
+    (loop [visited #{[start-column start-row]}
            frontier start-frontier
            board empty-board
-           i 0]
+           i 0
+           vistit-path [[start-column start-row]]]
       (if (or (empty? frontier) (= (count visited) (count board)))
         {:columns columns
          :rows rows
-         :board board}
-        ;; todo return a maze map
+         :board board
+         :path vistit-path}
         ;; else
         (let [next-edge (rand-nth frontier)
               shorter-frontier (filter-frontier frontier next-edge)
               node (:to next-edge)
-              ; _ (println)
-              ; _ (println "next edge " i next-edge)
-              ; _ (println "node " node)
-              ; _ (println "node visited?" (contains? visited node))
-              ;_ (println "short-front " shorter-frontier)
-              ;_ (println "front " frontier)
               next-visited (insert-node-to-visited visited node)
-              ;_ (println "visted " next-visited)
               not-visited-neighbourg-edges (get-not-visited-neighbourg-edges
                                             node [columns rows] next-visited)
-              ;_ (println "nbs " not-visited-neighbourg-edges)
               next-frontier (insert-to-frontier shorter-frontier
                                                 not-visited-neighbourg-edges)
-              ;_ (println "next front " next-frontier)
-              next-board (insert-edge-to-graph board [columns rows] next-edge)
-              ;_ (println "board " next-board)
-            ]
-          (recur next-visited next-frontier next-board (inc i)))))))
+              next-board (insert-edge-to-graph board [columns rows] next-edge)]
+          (recur next-visited
+                 next-frontier
+                 next-board
+                 (inc i)
+                 (conj vistit-path node)))))))
 
 (defn print-maze
   "Given a maze pprint it"

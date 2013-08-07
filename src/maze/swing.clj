@@ -4,6 +4,7 @@
             [seesaw.core :as saw]
             [seesaw.icon :as saw-icon]
             [maze.keys :as keys]
+            [maze.state :as state]
             [logging.core :as log]))
 
 (defn make-frame
@@ -35,9 +36,9 @@
   "Create a tile peace of the maze"
   [neighbors]
   (saw/label :text  ""
-         :border (neighbors-2-border neighbors)
-         :background "#fff"
-         :foreground :black))
+             :border (neighbors-2-border neighbors)
+             :background :black
+             :foreground :black))
 
 (defn setup-gui
   "Setup the swing/seasaw gui"
@@ -64,17 +65,25 @@
 (def you-where-here (saw-icon/icon
                      (io/resource "dot.png")))
 
-(defn scale-icon-to-label
-  "given a label and a icon,
-return a icon scaled to the size of the label"
-  [label icon]
+(defn scale-icon
+  "Given a icon and w,h return a scaled icon "
+  [icon w h]
   (let [img (.getImage icon)
-        size (saw/config label :size)
-        [w h] [(max 10 (.width size))
-               (max 10 (.height size))]
         smooth java.awt.Image/SCALE_SMOOTH
         scaled-img (.getScaledInstance img w h smooth)]
     (saw-icon/icon scaled-img)))
+
+(def scale-icon-memoize (memoize scale-icon))
+
+(defn scale-icon-to-label
+  "given a label and a icon,
+return a icon scaled to the size of the label"
+  [icon label]
+  (let [
+        size (saw/config label :size)
+        [w h] [(max 10 (.width size))
+               (max 10 (.height size))]]
+    (scale-icon-memoize icon w h)))
 
 (defn change-label
   "Given a label change it"
@@ -82,14 +91,14 @@ return a icon scaled to the size of the label"
   (cond (= action :enter)
         (saw/config! label
                      :icon (scale-icon-to-label
-                            label
-                            you-are-here-dot)
+                            you-are-here-dot
+                            label)
                      :background :white)
         (= action :leave)
         (saw/config! label
                      :icon (scale-icon-to-label
-                            label
-                            you-where-here)
+                            you-where-here
+                            label)
                      :background :white)
         (= action :goal)
         (saw/config! label
@@ -109,13 +118,43 @@ return a icon scaled to the size of the label"
     (change-label leave-label :leave)
     (change-label enter-label :enter)))
 
+(defn init-state
+  "Given init the given label"
+  [labels state]
+  (let [label (nth labels state)]
+    (change-label label :init)))
+
+(defn draw-maze
+  "Given the labels and a chan with events update gui"
+  [labels maze quit-chan timeout]
+  (let [_ (log/debug "Draw Maze START")
+        states (set (range (count labels)))
+        [c r] [(:columns maze) (:rows maze)]
+        start-state (state/position-to-index (first (:path maze)) [c r])
+        _ (init-state labels start-state)]
+    (as/go
+     (loop [state start-state path (rest (:path maze))]
+       (let [[v ch] (as/alts! [quit-chan (as/timeout timeout)])]
+         (cond (or (empty? path) (= ch quit-chan))
+               (log/info {:agent :draw-maze
+                          :action :stop
+                          :allert "Drawing maze stopped"})
+               :else
+               (let [new-state (state/position-to-index (first path) [c r])]
+                 (log/info {:agent :draw-maze
+                            :action [state new-state]})
+                 (when (contains? states new-state)
+                   (init-state labels new-state))
+                 (recur new-state (rest path)))))))))
+
 (defn change-gui
   "Given the labels and a chan with events update gui"
   [labels in-chan quit-chan]
   (let [_ (log/debug "GUI handler START")
         states (set (range (count labels)))
-        _ (switch-state labels 0 0)
-        _ (change-label (last labels) :goal)]
+        _ (switch-state labels 0 0) ;; TODO fix this hard coding
+        _ (change-label (last labels) :goal) ;; TODO goal is TDB
+        ]
     (as/go
      (loop []
        (let [[v ch] (as/alts! [quit-chan in-chan])]

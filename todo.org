@@ -2,25 +2,6 @@ List of things to do on the Maze
 #+TODO: TODO IN-PROGRESS WAITING DONE
 #+TAGS: { @OFFICE(o) @HOME(h) } COMPUTER(c) PHONE(p) READING(r)
 
-* Org Mode Quick Refs
-** toggle todo C-c C-t
-** Key shortcuts
-*** TAB / S-TAB – (un)fold
-*** M-up/down – move a headline up or down
-*** M-left/right – promote or demote a headline
-*** M-RET – insert a new headline
-
-** Agendas
-*** C-c a – agenda
-*** C-c [ – add document to the list of agenda files
-*** C-c ] – remove document from the list of agenda files
-*** C-c . – add date
-*** C-u C-c . – add time and date
-*** C-g – stop doing what you are trying to do, escape
-
-** C-c C-c – add tag (return to insert)
-
-
 * Tasks
 ** DONE Make org mode todo list                            :CLOJURE:COMPUTER:
    CLOSED: <2013-08-07 Wed>
@@ -44,3 +25,23 @@ List of things to do on the Maze
 *** TODO disable logging
 *** TODO icon
 *** get ant stuff in git (sub dir)
+
+
+
+* Org Mode Quick Refs
+** toggle todo C-c C-t
+** Key shortcuts
+*** TAB / S-TAB – (un)fold
+*** M-up/down – move a headline up or down
+*** M-left/right – promote or demote a headline
+*** M-RET – insert a new headline
+
+** Agendas
+*** C-c a – agenda
+*** C-c [ – add document to the list of agenda files
+*** C-c ] – remove document from the list of agenda files
+*** C-c . – add date
+*** C-u C-c . – add time and date
+*** C-g – stop doing what you are trying to do, escape
+
+** C-c C-c – add tag (return to insert)

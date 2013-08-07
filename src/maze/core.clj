@@ -12,6 +12,29 @@
             [clojure.core.async.lab :as as-lab])
   (:gen-class))
 
+(defn draw-maze
+  "Create agent that illustrates generation of the maze the  and send state array to the GUI"
+  [quit-chan maze timeout]
+  (let [out-chan (as/chan)
+        _ (log/debug "Start Go Left to state handler")
+        [c r] [(:columns maze) (:rows maze)]
+        start-state (state/position-to-index (first (:path maze)) [c r])
+        _ (println "Start state " start-state)]
+    (as/go (loop [state start-state path (rest (:path maze))]
+             (let [[v ch] (as/alts! [quit-chan (as/timeout timeout)])]
+               (cond (or (empty? path) (= ch quit-chan))
+                     (log/info {:agent :generate-maze
+                                :action :stop
+                                :allert "stopped action handler"})
+                     :else
+                     (let [new-state (state/position-to-index (first path) [c r])]
+                       (log/info {:agent :generate-maze
+                                  :state new-state})
+                       (as/>! out-chan [state new-state])
+                       (recur new-state (rest path)))))))
+    out-chan))
+
+
 (defn inner-main [columns rows]
   (let [arrows #{"Up" "Down" "Left" "Right"}
         quit-key #{"q" "Q"}
@@ -25,17 +48,22 @@
         labels (map swing-gui/make-maze-tile (:board maze))
 
         key-ch-in (swing-gui/setup-gui maze labels q1-out)
-
+        ;_ (swing-gui/draw-maze labels maze q3-out 2)
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
-        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze)
-        st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
-        ;st3-ch-in (agent-left/keep-to-the-left q3-out maze)
+        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0)
+        ;st2-ch-in (draw-maze q2-out maze  100)
+        ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
+        ;st3-ch-in (agent-left/keep-to-the-left q3-out maze 20)
         ;st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in st3-ch-in])
-        st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in])
+        st-all-ch-in (util/fan-in [st1-ch-in])
         ]
     (swing-gui/change-gui labels st-all-ch-in q5-out)
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
     (log/debug "Main done")))
+
+(System/setProperty "apple.laf.useScreenMenuBar" "true")
+
+(System/setProperty "com.apple.mrj.application.apple.menu.about.name" "TestHest")
 
 ;; TODO fix this
 (defn -main

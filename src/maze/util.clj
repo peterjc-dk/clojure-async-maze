@@ -32,13 +32,11 @@
             (as/alts! outs))))
     cs))
 
-
 (defn in-out [in out]
   (as/go
    (while true
      (let [x (as/<! in)]
        (as/>! out x)))))
-
 
 (defn chan-2-lazy-seq
   "chan to lazy seq"
@@ -50,10 +48,16 @@
   [in-chan]
   (cons (as/<!! in-chan) (lazy-seq (ch-2-lazy in-chan))))
 
+(defn ch-2-lazy-timeout
+  "chan to lazy seq"
+  [in-chan timeout]
+  (cons (first (as/alts!! [in-chan (as/timeout timeout)]))
+        (lazy-seq (ch-2-lazy-timeout in-chan timeout))))
+
 (defn sq-2-chan [sq]
   (let [c (as/chan)]
     (as/go (loop [s sq]
           (if s
             (do (as/>! c (first s))
-                (recur (rest s))) "Stop")))
+                (recur (rest s))) (as/close! c))))
     c))
