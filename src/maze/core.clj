@@ -37,7 +37,7 @@
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
     (log/debug "Main done")))
 
-
+;; TODO fix this
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]

@@ -51,7 +51,7 @@
                   (as/>! out-chan (keyword (.toLowerCase key-text))))))))
     cs))
 
-(defn split-keys
+(defn split-keys-old
   "Given a chan of keyboard presses split in arrows an q"
   [in-keys-ch]
   (let [arrows #{"Up" "Down" "Left" "Right"}
