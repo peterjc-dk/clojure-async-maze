@@ -65,6 +65,8 @@
 (def you-where-here (saw-icon/icon
                      (io/resource "dot.png")))
 
+(def goal (saw-icon/icon
+                     (io/resource "clojure-logo.png")))
 (defn scale-icon
   "Given a icon and w,h return a scaled icon "
   [icon w h]
@@ -85,33 +87,47 @@ return a icon scaled to the size of the label"
                (max 10 (.height size))]]
     (scale-icon-memoize icon w h)))
 
+(defn change-border-color
+  "Given a border return a copy with the color changed"
+  [border color]
+  (let [in-sets (.getBorderInsets border)
+        col (seesaw.color/color color)]
+    (javax.swing.border.MatteBorder. in-sets col)))
+
 (defn change-label
   "Given a label change it"
   [label action]
-  (cond (= action :enter)
-        (saw/config! label
-                     :icon (scale-icon-to-label
-                            you-are-here-dot
-                            label)
-                     :background :white)
-        (= action :leave)
-        (saw/config! label
-                     :icon (scale-icon-to-label
-                            you-where-here
-                            label)
-                     :background :white)
-        (= action :goal)
-        (saw/config! label
-                     :icon nil
-                     :background :blue)
-        (= action :init)
-        (saw/config! label
-                     :icon nil
-                     :background :white)))
+  (let [border (saw/config label :border)]
+   (cond (= action :enter)
+         (saw/config! label
+                      :icon (scale-icon-to-label
+                             you-are-here-dot
+                             label)
+                      :border (change-border-color border :red)
+                      :background :white)
+         (= action :leave)
+         (saw/config! label
+                      :icon (scale-icon-to-label
+                             you-where-here
+                             label)
+                      :background :white)
+         (= action :goal)
+         (saw/config! label
+                      :icon (scale-icon-to-label
+                             goal
+                             label)
+                      :background :white)
+         (= action :init)
+         (saw/config! label
+                      :icon nil
+                      :background :white))))
 
+;((saw/dialog :content "hello"))
+;(-> (dialog :content form) pack! show!)
+;(-> (saw/dialog :content "JUHU") saw/pack! saw/show!)
 (defn switch-state
   "Given old and new state update labels"
-  [labels old-state new-state]
+  [labels agent old-state new-state]
   (let [
         leave-label (nth labels old-state)
         enter-label (nth labels new-state)]
@@ -152,7 +168,7 @@ return a icon scaled to the size of the label"
   [labels in-chan quit-chan]
   (let [_ (log/debug "GUI handler START")
         states (set (range (count labels)))
-        _ (switch-state labels 0 0) ;; TODO fix this hard coding
+        ;_ (switch-state labels 0 0) ;; TODO fix this hard coding
         _ (change-label (last labels) :goal) ;; TODO goal is TDB
         ]
     (as/go
