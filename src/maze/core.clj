@@ -3,6 +3,8 @@
             [maze.generate :as generate]
             [maze.state :as state]
             [maze.swing :as swing-gui]
+            [maze.swing_pop :as swing-pop]
+            [maze.draw_maze :as draw-maze]
             [maze.util :as util]
             [maze.agents.left :as agent-left]
             [maze.agents.arrow :as agent-arrow]
@@ -11,28 +13,6 @@
             [clojure.core.async :as as]
             [clojure.core.async.lab :as as-lab])
   (:gen-class))
-
-(defn draw-maze
-  "Create agent that illustrates generation of the maze the  and send state array to the GUI"
-  [quit-chan maze timeout]
-  (let [out-chan (as/chan)
-        _ (log/debug "Start Go Left to state handler")
-        [c r] [(:columns maze) (:rows maze)]
-        start-state (state/position-to-index (first (:path maze)) [c r])
-        _ (println "Start state " start-state)]
-    (as/go (loop [state start-state path (rest (:path maze))]
-             (let [[v ch] (as/alts! [quit-chan (as/timeout timeout)])]
-               (cond (or (empty? path) (= ch quit-chan))
-                     (log/info {:agent :generate-maze
-                                :action :stop
-                                :allert "stopped action handler"})
-                     :else
-                     (let [new-state (state/position-to-index (first path) [c r])]
-                       (log/info {:agent :generate-maze
-                                  :state new-state})
-                       (as/>! out-chan [state new-state])
-                       (recur new-state (rest path)))))))
-    out-chan))
 
 
 (defn inner-main [columns rows day-or-night]
@@ -50,7 +30,7 @@
         key-ch-in (swing-gui/setup-gui maze labels q1-out)
 
         _ (when (= day-or-night :day)
-            (swing-gui/draw-maze labels maze q3-out 2 goal-index))
+            (draw-maze/draw-maze labels maze q3-out 2 goal-index))
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
         st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0 day-or-night)
         ;st2-ch-in (draw-maze q2-out maze  100)
@@ -83,7 +63,7 @@
     (when (contains? #{:no} done)
       (let [{day-or-night :day-or-night
             columns :columns
-            rows :rows} (swing-gui/welcome-pop default-columns default-rows)]
+            rows :rows} (swing-pop/welcome-pop default-columns default-rows)]
         (recur (inner-main columns rows day-or-night)
                (+ columns (rand-int columns))
                (+ rows (rand-int rows)))))))
