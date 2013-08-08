@@ -21,7 +21,7 @@
   :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
   ;; Leave the contents of :source-paths out of jars (for AOT projects).
   :omit-source true
-  :jvm-opts ["-Xmx1g" "-Xdock:name=The Maze"]
+  :jvm-opts ["-Xmx1g" "-Xdock:name=The Clojure Maze"]
   :profiles {:dev
              {:dependencies [[midje "1.5.1"]
                              [bultitude "0.1.7"]

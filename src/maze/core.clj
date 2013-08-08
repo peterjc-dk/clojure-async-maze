@@ -35,7 +35,7 @@
     out-chan))
 
 
-(defn inner-main [columns rows]
+(defn inner-main [columns rows day-or-night]
   (let [arrows #{"Up" "Down" "Left" "Right"}
         quit-key #{"q" "Q"}
         goal-index (dec (* columns rows))
@@ -48,9 +48,11 @@
         labels (map swing-gui/make-maze-tile (:board maze))
 
         key-ch-in (swing-gui/setup-gui maze labels q1-out)
-        ;_ (swing-gui/draw-maze labels maze q3-out 2)
+
+        _ (when (= day-or-night :day)
+            (swing-gui/draw-maze labels maze q3-out 2 goal-index))
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
-        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0)
+        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0 day-or-night)
         ;st2-ch-in (draw-maze q2-out maze  100)
         ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
         ;st3-ch-in (agent-left/keep-to-the-left q3-out maze 20)
@@ -58,13 +60,15 @@
         st-all-ch-in (util/fan-in [st1-ch-in])
         ]
     (as/go (as/>! quit-bc-ch-out
-                  (as/<!
-                   (swing-gui/change-gui labels
-                                         st-all-ch-in
-                                         q5-out
-                                         goal-index))))
+                   (as/<!
+                    (swing-gui/change-gui labels
+                                          st-all-ch-in
+                                          q5-out
+                                          goal-index))))
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
-    (log/debug "Main done")))
+    (log/debug "Main setup done")
+    (as/<!! q3-out)))
+
 
 ;(System/setProperty "apple.laf.useScreenMenuBar" "true")
 ;(System/setProperty "com.apple.mrj.application.apple.menu.about.name" "TestHest")
@@ -75,4 +79,11 @@
   [& args]
   ;; work around dangerous default behaviour in Clojure
   (alter-var-root #'*read-eval* (constantly false))
-  (inner-main 15 10))
+  (loop [done :no default-columns 10 default-rows 10]
+    (when (contains? #{:no} done)
+      (let [{day-or-night :day-or-night
+            columns :columns
+            rows :rows} (swing-gui/welcome-pop default-columns default-rows)]
+        (recur (inner-main columns rows day-or-night)
+               (+ columns (rand-int columns))
+               (+ rows (rand-int rows)))))))

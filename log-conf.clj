@@ -5,7 +5,7 @@
  {
   :standard-out
   {:min-level nil
-   :enabled? false
+   :enabled? true
    :async? false
    :limit-per-msecs nil
    :format-fn :str-edn-short-format-fn}

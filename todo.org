@@ -5,28 +5,35 @@ List of things to do on the Maze
 * Tasks
 ** DONE Make org mode todo list                            :CLOJURE:COMPUTER:
    CLOSED: <2013-08-07 Wed>
+** DONE optimize icon switcing
+** TODO make more jvisualvm  studies
 ** TODO Investigate cpu hugging
    SCHEDULED: <2013-08-08 Thu>
-*** TODO make more jvisualvm  studies
-*** DONE optimize icon switcing
 
 ** DONE Finish arrow test
 ** TODO Test the quit channel
 
-** TODO Test log read back.
 *** DONE Randomize maze generation root
-*** TODO Solution generator
 *** DONE Animate maze generation
 *** DONE X at the goal
 *** IN-PROGRESS Detect when at the goal
 *** IN-PROGRESS pop up a start again
+*** IN-PROGRESS pop up welcome-pop
+*** IN-PROGRESS handle day or night mode
+*** IN-PROGRESS visualize multible agents
+*** TODO what when two agents meet?
+*** TODO Test log read back.
+*** TODO Solution generator
+*** TODO have a dynamic board
 
-** TODO Builder
+** Builder
 *** TODO disable logging
 *** TODO icon
 *** TODO get ant stuff in git (sub dir)
 
-
+** Code analysis
+*** TODO Code coverage
+*** TODO static analysis
 
 * Org Mode Quick Refs
 ** toggle todo C-c C-t

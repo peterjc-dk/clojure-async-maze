@@ -19,15 +19,15 @@
         sample-list (repeatedly (+ 10 sample-size) (fn [] (rand-nth [:left :up :down :right])))
         qc (as/chan)
         in-chan (util/sq-2-chan sample-list)
-        rc (arrow/arrow-to-state in-chan qc maze start-state)
+        rc (arrow/arrow-to-state in-chan qc maze start-state :day)
         ls (util/ch-2-lazy-timeout rc 200)]
-    (and (every? #(= :arrow-walk %)
-                 (map first (take sample-size ls)))
-         (every? #(contains? pos-set %)
-                 (map second (take sample-size ls)))
-         (every? #(contains? pos-set %)
-                 (map last (take sample-size ls))))))
+    [(every? #(= :arrow-day-walker %)
+             (map first (take sample-size ls)))
+     (every? #(contains? pos-set %)
+             (map second (take sample-size ls)))
+     (every? #(contains? pos-set %)
+             (map last (take sample-size ls)))]))
 
 (test/deftest test-arrow-walker
   (dotimes [n 10]
-    (m/fact (try-arrow) => true)))
+    (m/fact (try-arrow) => (m/just [true? true? true?]))))
