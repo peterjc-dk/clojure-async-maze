@@ -60,8 +60,7 @@
                    (io/resource "you-are-here-dot.png"))
             :border-color :black
             :background-color :white}
-    :leave {:icon (saw-icon/icon
-                   (io/resource "dot.png"))
+    :leave {:icon nil
             :border-color :black
             :background-color :white}
     :goal {:icon (saw-icon/icon

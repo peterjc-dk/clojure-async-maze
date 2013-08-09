@@ -16,10 +16,10 @@ List of things to do on the Maze
 *** DONE Randomize maze generation root
 *** DONE Animate maze generation
 *** DONE X at the goal
-*** IN-PROGRESS Detect when at the goal
-*** IN-PROGRESS pop up a start again
-*** IN-PROGRESS pop up welcome-pop
-*** IN-PROGRESS handle day or night mode
+*** DONE Detect when at the goal
+*** DONE pop up a start again
+*** DONE pop up welcome-pop
+*** DONE handle day or night mode
 *** IN-PROGRESS visualize multible agents
 *** TODO what when two agents meet?
 *** TODO Test log read back.

@@ -38,11 +38,13 @@ return a icon scaled to the size of the label"
 (defn change-label-icon
   "Given a label atribute and new-value change it if new-value not nil"
   [label icon]
-  (when icon
+  (if icon
     (saw/config!
      label :icon (scale-icon-to-label
                   icon
-                  label))))
+                  label))
+    (saw/config!
+     label :icon nil)))
 
 (defn change-label-background
   "Given a label atribute and new-value change it if new-value not nil"
@@ -81,4 +83,14 @@ return a icon scaled to the size of the label"
         leave-label (nth labels old-state)
         enter-label (nth labels new-state)]
     (change-label leave-label agent :leave)
-    (change-label enter-label agent :enter)))
+    (change-label enter-label agent :enter)
+    (when (= agent :left-walk)
+      (let [leave-txt (saw/config leave-label :text)
+            enter-txt (saw/config enter-label :text)
+            leave-val (if (not= leave-txt "") (read-string leave-txt) 0)
+            enter-val (if (not= enter-txt "")
+                        (min (read-string enter-txt)
+                             (inc leave-val))
+                          (inc leave-val))]
+        (saw/config! leave-label :text (str leave-val))
+        (saw/config! enter-label :text (str enter-val))))))

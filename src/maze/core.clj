@@ -35,9 +35,9 @@
         st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0 day-or-night)
         ;st2-ch-in (draw-maze q2-out maze  100)
         ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
-        ;st3-ch-in (agent-left/keep-to-the-left q3-out maze 20)
+        st3-ch-in (agent-left/keep-to-the-left q3-out maze 20 100)
         ;st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in st3-ch-in])
-        st-all-ch-in (util/fan-in [st1-ch-in])
+        st-all-ch-in (util/fan-in [st1-ch-in st3-ch-in])
         ]
     (as/go (as/>! quit-bc-ch-out
                    (as/<!
