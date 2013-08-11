@@ -64,3 +64,21 @@
          (position-to-index new-position [columns rows])
          ;; else
          index)))))
+
+(defn next-to-each-other
+  "Given two positions find out if the are one step appart and return that step or nil"
+  [index1 index2 {columns :columns rows :rows}]
+  (let [[i1 j1] (index-to-position index1 [columns rows])
+        [i2 j2] (index-to-position index2 [columns rows])]
+    (->>  (neighbourgs [i1 j1] [columns rows])
+         (filter (fn [[k v]] (= v [i2 j2])))
+         first)))
+
+(let [maze {:columns 4, :rows 4,
+            :board [[:down] [:right] [:down :left] [:down] [:right :down :up] [:down :right :left] [:left :up] [:down :up] [:up :down] [:right :up] [:down :left] [:down :up] [:up] [:right] [:left :right :up] [:left :up]],
+            :path [[1 3] [2 3] [3 3] [3 2] [2 2] [1 2] [1 1] [2 1] [0 1] [0 2] [3 1] [2 0] [0 3] [0 0] [1 0] [3 0]]}]
+  [(next-to-each-other 0 1 maze)
+   (next-to-each-other 0 3 maze)
+   (next-to-each-other 0 4 maze)
+   (if (next-to-each-other 0 1 maze) "OK") ]
+  )

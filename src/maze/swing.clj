@@ -52,8 +52,11 @@
         f (make-frame "The Maze" columns rows (into [] labels))
         key-handler (fn [e] (as/go
                             (as/>! e-chan
-                                (keys/key-pressed-event-2-key-pressed-map e))))]
+                                   (keys/key-pressed-event-2-key-pressed-map e))))
+        mouse-handler (fn [e] (println e))
+        ]
     (saw/listen f :key-pressed key-handler)
+    (saw/listen f :mouse-clicked  key-handler)
     (saw/show! f)
     (as/go
      (let [[v ch] (as/alts! [quit-chan])]

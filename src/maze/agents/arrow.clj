@@ -7,8 +7,8 @@
   "given a action chan return next state id"
   [in-chan quit-chan maze start-state day-or-night]
   (let [out-chan (as/chan)
-        day-or-night-str (clojure.string/replace (str day-or-night) #":" "")
-        agent-name (keyword (str "arrow-" (str day-or-night-str) "-walker") )
+        day-or-night-str (name day-or-night)
+        agent-name (keyword (str "arrow-" day-or-night-str "-walker") )
         _ (log/debug "Start action to state handler")
         _ (as/go (as/>! out-chan [agent-name 0 0]))]
     (as/go (loop [state start-state]
