@@ -21,10 +21,7 @@
         goal-index (dec (* columns rows))
         [q1-out q2-out q3-out q4-out q5-out] [(as/chan) (as/chan) (as/chan) (as/chan) (as/chan)]
         quit-bc-ch-out (as-lab/broadcast q1-out q2-out q3-out q4-out q5-out)
-
-        _ (log/debug (str "Generate Maze " columns "x" rows))
         maze (generate/generate-maze [columns rows])
-        _ (log/debug "Show Swing GUI")
         labels (map swing-gui/make-maze-tile (:board maze))
 
         key-ch-in (swing-gui/setup-gui maze labels q1-out)

@@ -1,5 +1,5 @@
-(defproject maze "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
+(defproject maze "0.2.0-SNAPSHOT"
+  :description "This is a simple Maze app, written to experiance with core.async"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
@@ -11,9 +11,11 @@
                  [com.taoensso/timbre "2.4.1"]
                  [clj-time "0.5.1"]
                  [seesaw "1.4.0"]
+                 [prismatic/schema "0.1.8"]
+                 [org.clojure/data.fressian "0.2.0"]
                  [logging "0.1.0-SNAPSHOT"]]
   :main maze.core
-   :jar-name "maze.jar"
+  :jar-name "maze.jar"
   ;; As above, but for uberjar.
   :uberjar-name "maze-standalone.jar"
   ;; Options to pass to java compiler for java source,
@@ -29,4 +31,3 @@
                              ;; <<<<==== fix
                              [lein-midje "3.1.0"]]
               :plugins [[lein-midje "3.1.0"]]}})
-;; -Xdock:name="YourNameHere"

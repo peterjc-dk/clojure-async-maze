@@ -12,7 +12,7 @@
   (let [node-index (state/position-to-index
                     node [columns rows])]
     (assoc graph node-index
-               (conj (get graph node-index) action))))
+           (conj (get graph node-index) action))))
 
 (defn insert-edge-to-graph
   "Given a graph and a edge return a new graph with the edge added"
@@ -44,7 +44,7 @@
   "Given the frontier filter out irrelevant edges"
   [frontier edge]
   (->> (remove #(= edge %) frontier)
-      (remove #(= (:to edge) (:to %)))))
+       (remove #(= (:to edge) (:to %)))))
 
 (defn generate-empty-board
   "given size [columns rows] a empty board is generated"

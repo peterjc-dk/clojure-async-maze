@@ -17,12 +17,10 @@
   "Use filter on in chan to out chan"
   [in-chan keys]
   (let [out-chan (as/chan)]
-    (log/debug (str "Start key filter" keys))
     (as/go (while true
              (let [in-val (as/<! in-chan)
                    key-text (:key-text in-val)]
                (when (contains? keys key-text)
-                 (log/info (keyword (.toLowerCase key-text)))
                  (as/>! out-chan (keyword (.toLowerCase key-text)))))))
     out-chan))
 
@@ -41,13 +39,11 @@
   [in-chan key-set-list]
   (let [cs (repeatedly (count key-set-list) as/chan)
         cs-key-map (map (fn [keys ch] {:keys keys :chan ch}) key-set-list cs)]
-    (log/debug (str "Start key filter" key-set-list))
     (as/go (while true
              (let [in-val (as/<! in-chan)
                    key-text (:key-text in-val)]
                (doseq [{keys :keys out-chan :chan} cs-key-map]
                  (when (contains? keys key-text)
-                  (log/info (keyword (.toLowerCase key-text)))
                   (as/>! out-chan (keyword (.toLowerCase key-text))))))))
     cs))
 

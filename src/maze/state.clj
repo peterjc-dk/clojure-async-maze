@@ -73,12 +73,3 @@
     (->>  (neighbourgs [i1 j1] [columns rows])
          (filter (fn [[k v]] (= v [i2 j2])))
          first)))
-
-(let [maze {:columns 4, :rows 4,
-            :board [[:down] [:right] [:down :left] [:down] [:right :down :up] [:down :right :left] [:left :up] [:down :up] [:up :down] [:right :up] [:down :left] [:down :up] [:up] [:right] [:left :right :up] [:left :up]],
-            :path [[1 3] [2 3] [3 3] [3 2] [2 2] [1 2] [1 1] [2 1] [0 1] [0 2] [3 1] [2 0] [0 3] [0 0] [1 0] [3 0]]}]
-  [(next-to-each-other 0 1 maze)
-   (next-to-each-other 0 3 maze)
-   (next-to-each-other 0 4 maze)
-   (if (next-to-each-other 0 1 maze) "OK") ]
-  )

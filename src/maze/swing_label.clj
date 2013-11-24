@@ -6,8 +6,7 @@
             [seesaw.icon :as saw-icon]
             [maze.keys :as keys]
             [maze.state :as state]
-            [maze.swing_agent_map :as agent-map]
-            [logging.core :as log]))
+            [maze.swing_agent_map :as agent-map]))
 
 (defn scale-icon
   "Given a icon and w,h return a scaled icon "
@@ -79,8 +78,7 @@ return a icon scaled to the size of the label"
 (defn switch-state
   "Given old and new state update labels"
   [labels agent old-state new-state]
-  (let [
-        leave-label (nth labels old-state)
+  (let [leave-label (nth labels old-state)
         enter-label (nth labels new-state)]
     (change-label leave-label agent :leave)
     (change-label enter-label agent :enter)

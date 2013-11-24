@@ -13,21 +13,25 @@
     (as/go (as/>! out-chan [agent-name 0 0]))
     (as/go (loop [state start-state]
              (let [[v ch] (as/alts! [quit-chan in-chan])
-                   _ (println "Mouse value: " v)]
+                   ;; _ (println "Mouse value: " v)
+                   ]
                (cond (= ch in-chan)
                      (recur
                       (if-let [a-nb (state/next-to-each-other state (:tile v) maze)]
                         (let [[action position] a-nb
-                              _ (println "a-nb " a-nb)
+                              ;;_ (println "a-nb " a-nb)
                               next-state (state/get-new-position state action maze)
-                              _ (println "next state" next-state)]
+                              ;;_ (println "next state" next-state)
+                              ]
                           (log/info {:agent agent-name
                                      :action action
                                      :state next-state})
                           (as/>! out-chan [agent-name state next-state])
                           next-state)
                         ;; else
-                        (do (println "else") state)))
+                        (do
+                          ;;(println "else")
+                          state)))
                      (= ch quit-chan)
                      (do (log/info "stopped mouse action handler"))))))
     out-chan))

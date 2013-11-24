@@ -1,13 +1,10 @@
 (ns maze.swing
   (:require [clojure.core.async :as as]
-            ;[clojure.java.io :as io]
             [clojure.string :as str]
             [seesaw.core :as saw]
-            ;[seesaw.icon :as saw-icon]
             [maze.keys :as keys]
             [maze.swing_label :as swing-label]
             [maze.swing_pop :as swing-pop]
-            ;[maze.state :as state]
             [logging.core :as log]))
 
 (defn make-frame
@@ -53,8 +50,7 @@
         key-handler (fn [e] (as/go
                             (as/>! e-chan
                                    (keys/key-pressed-event-2-key-pressed-map e))))
-        mouse-handler (fn [e] (println e))
-        ]
+        mouse-handler (fn [e] (println e))]
     (saw/listen f :key-pressed key-handler)
     (saw/listen f :mouse-clicked  key-handler)
     (saw/show! f)
@@ -89,5 +85,3 @@
                      (if-not we-are-there
                       (recur)
                       we-are-there))))))))))
-
-;:param-string (.paramString event)
