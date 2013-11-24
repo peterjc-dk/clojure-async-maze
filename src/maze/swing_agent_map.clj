@@ -4,72 +4,28 @@
             [seesaw.icon :as saw-icon]))
 
 (def agent-map
-  {:arrow-day-walker
+  {:arrow-walker
    {:enter {:icon (saw-icon/icon
                    (io/resource "you-are-here-dot.png"))
-            :border-color :black
             :background-color :white}
     :leave {:icon (saw-icon/icon
                    (io/resource "dot.png"))
-            :border-color :black
-            :background-color :white}
-    :goal {:icon (saw-icon/icon
-                  (io/resource "clojure-logo.png"))
-           :border-color :black
-           :background-color :white}
-    :init {:icon nil
-           :border-color :black
-           :background-color :white}}
-
-   :arrow-night-walker
-   {:enter {:icon (saw-icon/icon
-                   (io/resource "you-are-here-dot.png"))
-            :border-color :red
-            :background-color :white}
-    :leave {:icon (saw-icon/icon
-                   (io/resource "dot.png"))
-            :border-color :red
-            :background-color :white}
-    :goal {:icon (saw-icon/icon
-                  (io/resource "clojure-logo.png"))
-           :border-color :black
-           :background-color :white}
-    :init {:icon nil
-           :border-color :black
-           :background-color :white}}
+            :background-color :white}}
 
    :ramdom-walk
    {:enter {:icon (saw-icon/icon
                    (io/resource "you-are-here-dot.png"))
-            :border-color :black
             :background-color :white}
     :leave {:icon (saw-icon/icon
                    (io/resource "dot.png"))
-            :border-color :black
-            :background-color :white}
-    :goal {:icon (saw-icon/icon
-                  (io/resource "clojure-logo.png"))
-           :border-color :black
-           :background-color :white}
-    :init {:icon nil
-           :border-color :black
-           :background-color :white}}
+            :background-color :white}}
 
    :left-walk
    {:enter {:icon (saw-icon/icon
                    (io/resource "you-are-here-dot.png"))
-            :border-color :black
             :background-color :white}
     :leave {:icon nil
-            :border-color :black
-            :background-color :white}
-    :goal {:icon (saw-icon/icon
-                  (io/resource "clojure-logo.png"))
-           :border-color :black
-           :background-color :white}
-    :init {:icon nil
-           :border-color :black
-           :background-color :white}}})
+            :background-color :white}}})
 
 (defn agent-action-lookup
   "well"

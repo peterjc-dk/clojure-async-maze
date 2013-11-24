@@ -62,9 +62,7 @@ return a icon scaled to the size of the label"
 
 (defn change-label-config
   "do the config! on a given label"
-  [label {icon :icon
-          border-color :border-color
-          background-color :background-color}]
+  [label icon border-color background-color]
   (do
     (change-label-icon label icon)
     (change-label-border label border-color)
@@ -72,16 +70,28 @@ return a icon scaled to the size of the label"
 
 (defn change-label
   "Given a label change it"
-  [label agent action]
-  (change-label-config label (agent-map/agent-action-lookup agent action)))
+  [label agent action border-color]
+  (let [agent-map (agent-map/agent-action-lookup agent action)
+        icon (:icon agent-map)
+        background-color (:background-color agent-map)]
+    (change-label-config label icon border-color background-color)))
+
+(defn set-goal
+  "do the config! on a label give a index"
+  [labels goal-index]
+  (let [label (nth labels goal-index)
+        goal-icon (saw-icon/icon
+                  (io/resource "clojure-logo.png"))]
+    (change-label-config label goal-icon :black :white)))
 
 (defn switch-state
   "Given old and new state update labels"
-  [labels agent old-state new-state]
+  [labels agent old-state new-state day-or-night]
   (let [leave-label (nth labels old-state)
-        enter-label (nth labels new-state)]
-    (change-label leave-label agent :leave)
-    (change-label enter-label agent :enter)
+        enter-label (nth labels new-state)
+        enter-border-color (if (= day-or-night :night) :red :black)]
+    (change-label leave-label agent :leave :black)
+    (change-label enter-label agent :enter enter-border-color)
     (when (= agent :left-walk)
       (let [leave-txt (saw/config leave-label :text)
             enter-txt (saw/config enter-label :text)

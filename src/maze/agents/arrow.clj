@@ -5,10 +5,9 @@
 
 (defn arrow-to-state
   "given a action chan return next state id"
-  [in-chan quit-chan maze start-state day-or-night]
+  [in-chan quit-chan maze start-state]
   (let [out-chan (as/chan)
-        day-or-night-str (name day-or-night)
-        agent-name (keyword (str "arrow-" day-or-night-str "-walker") )
+        agent-name (keyword (str "arrow-walker"))
         _ (log/debug "Start action to state handler")
         _ (as/go (as/>! out-chan [agent-name 0 0]))]
     (as/go (loop [state start-state]

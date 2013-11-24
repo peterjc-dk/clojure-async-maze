@@ -63,10 +63,10 @@
 
 (defn change-gui
   "Given the labels and a chan with events update gui"
-  [labels in-chan quit-chan goal-index]
+  [labels in-chan quit-chan goal-index day-or-night]
   (let [_ (log/debug "GUI handler START")
         states (set (range (count labels)))
-        _ (swing-label/change-label (nth labels goal-index) :arrow-day-walker :goal)]
+        _ (swing-label/set-goal labels goal-index)]
     (as/go
      (loop []
        (let [[v ch] (as/alts! [quit-chan in-chan])]
@@ -80,7 +80,7 @@
                  (log/info {:agent :change-gui
                             :action [agent old-state new-state]})
                  (when (contains? states new-state)
-                   (swing-label/switch-state labels agent old-state new-state)
+                   (swing-label/switch-state labels agent old-state new-state day-or-night)
                    (let [we-are-there (swing-pop/are-we-there-yet? new-state goal-index)]
                      (if-not we-are-there
                       (recur)

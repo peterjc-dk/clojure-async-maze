@@ -13,7 +13,7 @@
         bg-color (seesaw.color/get-rgba (saw/config label :background))
         black-rgba [0 0 0 255]]
     (when (= bg-color black-rgba)
-      (swing-label/change-label label :arrow-day-walker :init))))
+      (swing-label/change-label-config label nil :black :white))))
 
 (defn draw-maze
   "Given the labels and a chan with events update gui"

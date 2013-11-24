@@ -29,7 +29,7 @@
         _ (when (= day-or-night :day)
             (draw-maze/draw-maze labels maze q3-out 2 goal-index))
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
-        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0 day-or-night)
+        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0)
         ;st2-ch-in (draw-maze q2-out maze  100)
         ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
         st3-ch-in (agent-left/keep-to-the-left q3-out maze 20 100)
@@ -41,7 +41,8 @@
                     (swing-gui/change-gui labels
                                           st-all-ch-in
                                           q5-out
-                                          goal-index))))
+                                          goal-index
+                                          day-or-night))))
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
     (log/debug "Main setup done")
     (as/<!! q3-out)))
