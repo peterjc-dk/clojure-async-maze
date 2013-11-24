@@ -1,12 +1,11 @@
 (defproject maze "0.2.0-SNAPSHOT"
-  :description "This is a simple Maze app, written to experiance with core.async"
+  :description "This is a simple Maze app, written to experiment with core.async"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"
-                 "project" "file:repo"}
+  :repositories {"project" "file:repo"}
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/core.async "0.1.0-SNAPSHOT"]
+                 [org.clojure/core.async "0.1.242.0-44b1e3-alpha"]
                  [org.clojure/data.generators "0.1.0"]
                  [com.taoensso/timbre "2.4.1"]
                  [clj-time "0.5.1"]
@@ -20,7 +19,7 @@
   :uberjar-name "maze-standalone.jar"
   ;; Options to pass to java compiler for java source,
   ;; exactly the same as command line arguments to javac.
-  :javac-options ["-target" "1.6" "-source" "1.6" "-Xlint:-options"]
+  :javac-options ["-target" "1.7" "-source" "1.7" "-Xlint:-options"]
   ;; Leave the contents of :source-paths out of jars (for AOT projects).
   :omit-source true
   :jvm-opts ["-Xmx1g" "-Xdock:name=The Clojure Maze"]
