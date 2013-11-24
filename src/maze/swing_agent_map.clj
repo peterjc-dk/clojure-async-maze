@@ -4,7 +4,7 @@
             [seesaw.icon :as saw-icon]))
 
 (def agent-map
-  {:arrow-walker
+  {:user-walker
    {:enter {:icon (saw-icon/icon
                    (io/resource "you-are-here-dot.png"))
             :background-color :white}

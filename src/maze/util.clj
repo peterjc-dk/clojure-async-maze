@@ -57,7 +57,7 @@
 (defn sq-2-chan [sq]
   (let [c (as/chan)]
     (as/go (loop [s sq]
-          (if s
+          (if (and s (first s))
             (do (as/>! c (first s))
                 (recur (rest s))) (as/close! c))))
     c))

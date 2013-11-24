@@ -16,7 +16,8 @@
 
 
 (defn inner-main [columns rows day-or-night]
-  (let [arrows #{"Up" "Down" "Left" "Right"}
+  (let [timetick 100
+        arrows #{"Up" "Down" "Left" "Right"}
         quit-key #{"q" "Q"}
         goal-index (dec (* columns rows))
         [q1-out q2-out q3-out q4-out q5-out] [(as/chan) (as/chan) (as/chan) (as/chan) (as/chan)]
@@ -29,10 +30,11 @@
         _ (when (= day-or-night :day)
             (draw-maze/draw-maze labels maze q3-out 2 goal-index))
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
-        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0)
+
+        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in timetick q1-out maze 0 :user-walker)
         ;st2-ch-in (draw-maze q2-out maze  100)
         ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
-        st3-ch-in (agent-left/keep-to-the-left q3-out maze 20 100)
+        st3-ch-in (agent-left/keep-to-the-left timetick q3-out maze 20)
         ;st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in st3-ch-in])
         st-all-ch-in (util/fan-in [st1-ch-in st3-ch-in])
         ]

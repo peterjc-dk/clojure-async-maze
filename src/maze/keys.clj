@@ -1,7 +1,6 @@
 (ns maze.keys
   (:require [clojure.core.async :as as]
-            [clojure.core.async.lab :as as-lab]
-            [logging.core :as log])
+            [clojure.core.async.lab :as as-lab])
   (:import (java.awt.event KeyEvent)))
 
 (defn key-pressed-event-2-key-pressed-map
@@ -46,16 +45,3 @@
                  (when (contains? keys key-text)
                   (as/>! out-chan (keyword (.toLowerCase key-text))))))))
     cs))
-
-(defn split-keys-old
-  "Given a chan of keyboard presses split in arrows an q"
-  [in-keys-ch]
-  (let [arrows #{"Up" "Down" "Left" "Right"}
-        quit-key #{"q" "Q"}
-        k1-out (as/chan)
-        k2-out (as/chan)
-        key-bc-ch-out (as-lab/broadcast k1-out k2-out)
-        arrow-ch (filter-key-map-chan k1-out arrows)
-        quit-key-ch (filter-key-map-chan k2-out quit-key)]
-    ;(in-out in-keys-ch key-bc-ch-out)
-    [arrow-ch quit-key-ch]))
