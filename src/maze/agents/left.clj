@@ -21,7 +21,7 @@
 
 (defn keep-to-the-left
   "Create agent that do go left action (relativly) and send state array to the GUI"
-  [timetick quit-chan maze start-state]
+  [quit-chan maze start-state timetick]
   (let [out-chan (as/chan)
         _ (log/debug "Start Go Left to state handler")]
     (as/go (loop [state start-state action :up]

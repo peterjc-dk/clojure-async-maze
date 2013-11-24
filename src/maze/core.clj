@@ -20,8 +20,10 @@
         arrows #{"Up" "Down" "Left" "Right"}
         quit-key #{"q" "Q"}
         goal-index (dec (* columns rows))
+
         [q1-out q2-out q3-out q4-out q5-out] [(as/chan) (as/chan) (as/chan) (as/chan) (as/chan)]
         quit-bc-ch-out (as-lab/broadcast q1-out q2-out q3-out q4-out q5-out)
+
         maze (generate/generate-maze [columns rows])
         labels (map swing-gui/make-maze-tile (:board maze))
 
@@ -31,10 +33,10 @@
             (draw-maze/draw-maze labels maze q3-out 2 goal-index))
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
 
-        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in timetick q1-out maze 0 :user-walker)
-        ;st2-ch-in (draw-maze q2-out maze  100)
+        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0 :user-walker timetick)
+
         ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
-        st3-ch-in (agent-left/keep-to-the-left timetick q3-out maze 20)
+        st3-ch-in (agent-left/keep-to-the-left q3-out maze 20 timetick)
         ;st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in st3-ch-in])
         st-all-ch-in (util/fan-in [st1-ch-in st3-ch-in])
         ]
@@ -49,13 +51,8 @@
     (log/debug "Main setup done")
     (as/<!! q3-out)))
 
-
-;(System/setProperty "apple.laf.useScreenMenuBar" "true")
-;(System/setProperty "com.apple.mrj.application.apple.menu.about.name" "TestHest")
-
-;; TODO fix this
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Main outer loop"
   [& args]
   ;; work around dangerous default behaviour in Clojure
   (alter-var-root #'*read-eval* (constantly false))

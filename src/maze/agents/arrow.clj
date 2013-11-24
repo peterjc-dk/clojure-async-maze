@@ -4,34 +4,34 @@
             [schema.core :as s]
             [clojure.core.async :as as]))
 
+(defn get-next-state [state a maze]
+  (try
+    (let [action (s/validate (s/enum :left :up :down :right) a)]
+      (state/get-new-position state action maze))
+  (catch Exception e
+    state)))
+
 (defn arrow-to-state
   "given a action chan return next state id"
-  [in-chan timetick quit-chan maze start-state agent-name]
+  [in-chan quit-chan maze start-state agent-name timetick]
   (let [out-chan (as/chan)
         _ (log/debug "Start action to state handler")]
     (as/go (as/>! out-chan [agent-name start-state start-state]))
     (as/go (loop [state start-state]
              (let [timeout (as/timeout timetick)
                    [v ch] (as/alts! [quit-chan in-chan timeout])]
-               (when-not (= ch quit-chan)
-                 (recur (condp = ch
+               (condp = ch
 
-                          in-chan
-                          (try
-                            (let [action (s/validate (s/enum :left :up :down :right) v)
-                                  next-state (state/get-new-position state action maze)]
-                              (log/info {:agent agent-name
-                                         :action action
-                                         :state next-state})
-                              (as/>! out-chan [agent-name state next-state])
-                              next-state)
-                            (catch Exception e
-                              (do
-                                (as/>! out-chan [agent-name state state])
-                                state)))
+                 in-chan
+                 (let [next-state (get-next-state state v maze)]
+                   (as/>! out-chan [agent-name state next-state])
+                   (recur next-state))
 
-                          timeout
-                              (do
-                                (as/>! out-chan [agent-name state state])
-                                state)))))))
+                 timeout
+                 (do
+                   (as/>! out-chan [agent-name state state])
+                   (recur state))
+
+                 quit-chan
+                 (log/info (str "Stop agent " agent-name))))))
     out-chan))

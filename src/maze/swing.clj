@@ -70,18 +70,21 @@
     (as/go
      (loop []
        (let [[v ch] (as/alts! [quit-chan in-chan])]
-         (cond (= ch quit-chan)
-               (do (log/info {:agent :change-gui
-                              :action :stop
-                              :allert "Stop change GUI go-loop"})
-                   :stop)
-               :else
-               (let [[agent old-state new-state] v]
-                 (log/info {:agent :change-gui
-                            :action [agent old-state new-state]})
-                 (when (contains? states new-state)
-                   (swing-label/switch-state labels agent old-state new-state day-or-night)
-                   (let [we-are-there (swing-pop/are-we-there-yet? new-state goal-index)]
-                     (if-not we-are-there
-                      (recur)
-                      we-are-there))))))))))
+         (condp = ch
+
+           quit-chan
+           (do (log/info {:agent :change-gui
+                          :action :stop
+                          :allert "Stop change GUI go-loop"})
+               :stop)
+
+           in-chan
+           (let [[agent old-state new-state] v]
+             (log/info {:agent :change-gui
+                        :action [agent old-state new-state]})
+             (when (contains? states new-state)
+               (swing-label/switch-state labels agent old-state new-state day-or-night)
+               (let [we-are-there (swing-pop/are-we-there-yet? new-state goal-index)]
+                 (if-not we-are-there
+                   (recur)
+                   we-are-there))))))))))
