@@ -5,8 +5,7 @@
             [maze.agents.left :as left]
             [clojure.core.async :as as]
             [midje.sweet :as m]
-            [clojure.test :as test]
-            [criterium.core :as criterium]))
+            [clojure.test :as test]))
 
 (defn try-left
   "Start the go left agent and make asserts"

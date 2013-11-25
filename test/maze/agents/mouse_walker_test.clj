@@ -5,8 +5,7 @@
             [maze.agents.mouse_walker :as mouse]
             [clojure.core.async :as as]
             [midje.sweet :as m]
-            [clojure.test :as test]
-            [criterium.core :as criterium]))
+            [clojure.test :as test]))
 
 (defn try-mouse
   "Start the arrow agent and make asserts"

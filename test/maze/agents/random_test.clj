@@ -5,8 +5,7 @@
             [maze.agents.random :as random]
             [clojure.core.async :as as]
             [midje.sweet :as m]
-            [clojure.test :as test]
-            [criterium.core :as criterium]))
+            [clojure.test :as test]))
 
 (defn try-random
   "Start the random agent and make asserts"
@@ -31,6 +30,3 @@
     (m/fact (try-random) => true)))
 
 
-(comment
-  (criterium/quick-bench
-   (try-random)))

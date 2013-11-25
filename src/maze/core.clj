@@ -2,9 +2,9 @@
   (:require [maze.keys :as keys]
             [maze.generate :as generate]
             [maze.state :as state]
-            [maze.swing :as swing-gui]
-            [maze.swing_pop :as swing-pop]
-            [maze.draw_maze :as draw-maze]
+            [maze.swing.swing :as swing-gui]
+            [maze.swing.swing_pop :as swing-pop]
+            [maze.swing.draw_maze :as draw-maze]
             [maze.util :as util]
             [maze.agents.left :as agent-left]
             [maze.agents.arrow :as agent-arrow]
@@ -30,15 +30,12 @@
         key-ch-in (swing-gui/setup-gui maze labels q1-out)
 
         _ (when (= day-or-night :day)
-            (draw-maze/draw-maze labels maze q3-out 2 goal-index))
+            (draw-maze/draw-maze labels maze q2-out 2 goal-index))
         [arrow-ch-in quit-key-ch-in] (keys/split-key-2-chans key-ch-in [arrows quit-key])
 
-        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q1-out maze 0 :user-walker timetick)
-
-        ;st2-ch-in (agent-random/random-walk q2-out maze (maze :columns) 100)
-        st3-ch-in (agent-left/keep-to-the-left q3-out maze 20 timetick)
-        ;st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in st3-ch-in])
-        st-all-ch-in (util/fan-in [st1-ch-in st3-ch-in])
+        st1-ch-in (agent-arrow/arrow-to-state arrow-ch-in q3-out maze 0 :user-walker timetick)
+        st2-ch-in (agent-left/keep-to-the-left q4-out maze 20 timetick)
+        st-all-ch-in (util/fan-in [st1-ch-in st2-ch-in])
         ]
     (as/go (as/>! quit-bc-ch-out
                    (as/<!
@@ -49,7 +46,7 @@
                                           day-or-night))))
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
     (log/debug "Main setup done")
-    (as/<!! q3-out)))
+    (as/<!! q2-out)))
 
 (defn -main
   "Main outer loop"

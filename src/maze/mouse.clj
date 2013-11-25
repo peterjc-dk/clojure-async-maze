@@ -6,8 +6,7 @@
             [maze.state :as state]
             [maze.swing :as swing-gui]
             [maze.keys :as keys]
-            [logging.core :as log]
-            )
+            [logging.core :as log])
   (:import (java.awt.event KeyEvent)))
 
 (defn key-pressed-event-2-key-pressed-map

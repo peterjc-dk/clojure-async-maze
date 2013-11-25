@@ -1,6 +1,6 @@
 # maze
 
-FIXME: description
+
 
 ## Installation
 

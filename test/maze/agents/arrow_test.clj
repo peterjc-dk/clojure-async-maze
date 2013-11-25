@@ -5,8 +5,7 @@
             [maze.agents.arrow :as arrow]
             [clojure.core.async :as as]
             [midje.sweet :as m]
-            [clojure.test :as test]
-            [criterium.core :as criterium]))
+            [clojure.test :as test]))
 
 (defn try-arrow
   "Start the arrow agent and make asserts"
