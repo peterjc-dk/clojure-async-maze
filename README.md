@@ -1,27 +1,18 @@
-# The Clojre Async Maze
+# The Clojure Async Maze
 
 ![Screen Shot](resources/ScreenShot-2.png)
 
-[local link](src/maze/keys.clj)
-
 ## Installation
 
-Install Clojre and lein, clone the do lein run (details will folow)
+Install Clojure and lein, clone the do lein run (details will folow)
 ```clj
 lein run
 ```
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar maze-0.1.0-standalone.jar [args]
-
-
-
-## Examples
-
-
+Use the arrow keys to navigate.
+press "q" to quit
 
 
 ## License
