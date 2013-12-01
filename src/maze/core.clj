@@ -9,7 +9,6 @@
             [maze.agents.left :as agent-left]
             [maze.agents.arrow :as agent-arrow]
             [maze.agents.random :as agent-random]
-            [logging.core :as log]
             [clojure.core.async :as as]
             [clojure.core.async.lab :as as-lab])
   (:gen-class))
@@ -45,7 +44,6 @@
                                           goal-index
                                           day-or-night))))
     (as/go (as/>! quit-bc-ch-out (as/<! quit-key-ch-in)))
-    (log/debug "Main setup done")
     (as/<!! q2-out)))
 
 (defn -main

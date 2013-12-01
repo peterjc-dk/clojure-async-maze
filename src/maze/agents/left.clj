@@ -1,7 +1,6 @@
 (ns maze.agents.left
   (:require
    [maze.state :as state]
-   [logging.core :as log]
    [clojure.core.async :as as]))
 
 (defn get-next-action
@@ -22,8 +21,7 @@
 (defn keep-to-the-left
   "Create agent that do go left action (relativly) and send state array to the GUI"
   [quit-chan maze start-state timetick]
-  (let [out-chan (as/chan)
-        _ (log/debug "Start Go Left to state handler")]
+  (let [out-chan (as/chan)]
     (as/go (loop [state start-state action :up]
              (let [timeout (as/timeout timetick)
                    [v ch] (as/alts! [quit-chan timeout])]

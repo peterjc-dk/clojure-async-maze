@@ -3,16 +3,10 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :repositories {"project" "file:repo"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/core.async "0.1.242.0-44b1e3-alpha"]
-                 [org.clojure/data.generators "0.1.0"]
-                 [com.taoensso/timbre "2.4.1"]
-                 [clj-time "0.5.1"]
                  [seesaw "1.4.0"]
-                 [prismatic/schema "0.1.8"]
-                 [org.clojure/data.fressian "0.2.0"]
-                 [logging "0.1.0-SNAPSHOT"]]
+                 [prismatic/schema "0.1.8"]]
   :main maze.core
   :jar-name "maze.jar"
   ;; As above, but for uberjar.

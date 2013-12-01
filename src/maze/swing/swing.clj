@@ -5,8 +5,7 @@
             [seesaw.icon :as saw-icon]
             [maze.keys :as keys]
             [maze.swing.swing_label :as swing-label]
-            [maze.swing.swing_pop :as swing-pop]
-            [logging.core :as log]))
+            [maze.swing.swing_pop :as swing-pop]))
 
 (defn init-tile
   "init the given label"
@@ -67,31 +66,23 @@
     (as/go
      (let [[v ch] (as/alts! [quit-chan])]
        (saw/hide! f)
-       (saw/dispose! f)
-       (log/debug "GUI Frame disposed")))
+       (saw/dispose! f)))
     e-chan))
 
 (defn change-gui
   "Given the labels and a chan with events update gui"
   [labels in-chan quit-chan goal-index day-or-night]
-  (let [_ (log/debug "GUI handler START")
-        states (set (range (count labels)))
-        _ (swing-label/set-goal labels goal-index)]
+  (let [states (set (range (count labels)))]
+    (swing-label/set-goal labels goal-index)
     (as/go
      (loop []
        (let [[v ch] (as/alts! [quit-chan in-chan])]
          (condp = ch
-
            quit-chan
-           (do (log/info {:agent :change-gui
-                          :action :stop
-                          :allert "Stop change GUI go-loop"})
-               :stop)
+           :stop
 
            in-chan
            (let [[agent old-state new-state] v]
-             (log/info {:agent :change-gui
-                        :action [agent old-state new-state]})
              (when (contains? states new-state)
                (swing-label/switch-state labels agent old-state new-state day-or-night)
                (let [we-are-there (swing-pop/are-we-there-yet? new-state goal-index)]

@@ -1,6 +1,5 @@
 (ns maze.util
   (:require
-   [logging.core :as log]
    [clojure.core.async :as as]))
 
 (defn sink-chan
@@ -10,10 +9,10 @@
         (let [[v ch] (as/alts! [quit-chan in-chan])]
           (cond (= ch in-chan)
                 (do
-                  (log/info v)
+                  (println v)
                   (recur))
                 (= ch quit-chan)
-                (do (log/info "sink stopped")))))))
+                (do (println "sink stopped")))))))
 
 (defn fan-in [ins]
   (let [c (as/chan)]

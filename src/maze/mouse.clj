@@ -5,8 +5,8 @@
             [maze.generate :as generate]
             [maze.state :as state]
             [maze.swing :as swing-gui]
-            [maze.keys :as keys]
-            [logging.core :as log])
+            [maze.keys :as keys])
+
   (:import (java.awt.event KeyEvent)))
 
 (defn key-pressed-event-2-key-pressed-map
@@ -28,7 +28,6 @@
              (let [in-val (as/<! in-chan)
                    key-text (:key-text in-val)]
                (when (contains? keys key-text)
-                 (log/info (keyword (.toLowerCase key-text)))
                  (as/>! out-chan (keyword (.toLowerCase key-text)))))))
     out-chan))
 
@@ -47,13 +46,11 @@
   [in-chan key-set-list]
   (let [cs (repeatedly (count key-set-list) as/chan)
         cs-key-map (map (fn [keys ch] {:keys keys :chan ch}) key-set-list cs)]
-    (log/debug (str "Start key filter " key-set-list))
     (as/go (while true
              (let [in-val (as/<! in-chan)
                    key-text (:key-text in-val)]
                (doseq [{keys :keys out-chan :chan} cs-key-map]
                  (when (contains? keys key-text)
-                  (log/info (keyword (.toLowerCase key-text)))
                   (as/>! out-chan (keyword (.toLowerCase key-text))))))))
     cs))
 
@@ -66,8 +63,7 @@
         f (swing-gui/make-frame "The Maze 2" columns rows (into [] labels))
         key-handler (fn [e] (as/go
                             (as/>! e-chan
-                                   (key-pressed-event-2-key-pressed-map e))))
-        ]
+                                   (key-pressed-event-2-key-pressed-map e))))]
 
     (saw/listen f :key-pressed key-handler)
     (saw/show! f)

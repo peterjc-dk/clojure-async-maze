@@ -1,6 +1,5 @@
 (ns maze.agents.arrow
   (:require [maze.state :as state]
-            [logging.core :as log]
             [schema.core :as s]
             [clojure.core.async :as as]))
 
@@ -14,8 +13,7 @@
 (defn arrow-to-state
   "given a action chan return next state id"
   [in-chan quit-chan maze start-state agent-name timetick]
-  (let [out-chan (as/chan)
-        _ (log/debug "Start action to state handler")]
+  (let [out-chan (as/chan)]
     (as/go (as/>! out-chan [agent-name start-state start-state]))
     (as/go (loop [state start-state]
              (let [timeout (as/timeout timetick)
@@ -33,5 +31,5 @@
                    (recur state))
 
                  quit-chan
-                 (log/info (str "Stop agent " agent-name))))))
+                 (println (str "Stop agent " agent-name))))))
     out-chan))
