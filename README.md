@@ -1,6 +1,6 @@
 # The Clojre Async Maze
 
-![Screen Shot](resources/ScreenShot-1.png)
+![Screen Shot](resources/ScreenShot-2.png)
 
 [local link](src/maze/keys.clj)
 
