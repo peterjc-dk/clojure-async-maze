@@ -1,10 +1,10 @@
-# maze
+# The Clojre Async Maze
 
-
+![Screen Shot](https://github.com/peterjc-dk/clojure-async-maze/blob/master/resources/ScreenShot-1.png)
 
 ## Installation
 
-Download from http://example.com/FIXME.
+Install Clojre and lein, clone the do lein run (details will folow)
 
 ## Usage
 
@@ -12,21 +12,12 @@ FIXME: explanation
 
     $ java -jar maze-0.1.0-standalone.jar [args]
 
-## Options
 
-FIXME: listing of options this app accepts.
 
 ## Examples
 
-...
 
-### Bugs
 
-...
-
-### Any Other Sections
-### That You Think
-### Might be Useful
 
 ## License
 
