@@ -1,10 +1,15 @@
 # The Clojre Async Maze
 
-![Screen Shot](https://github.com/peterjc-dk/clojure-async-maze/blob/master/resources/ScreenShot-1.png)
+![Screen Shot](resources/ScreenShot-1.png)
+
+[local link](src/maze/keys.clj)
 
 ## Installation
 
 Install Clojre and lein, clone the do lein run (details will folow)
+```clj
+lein run
+```
 
 ## Usage
 
