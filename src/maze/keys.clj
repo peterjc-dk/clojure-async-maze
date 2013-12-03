@@ -12,26 +12,6 @@
    :when (.getWhen event)
    :is-action-key (.isActionKey event)})
 
-(defn filter-key-map-chan
-  "Use filter on in chan to out chan"
-  [in-chan keys]
-  (let [out-chan (as/chan)]
-    (as/go (while true
-             (let [in-val (as/<! in-chan)
-                   key-text (:key-text in-val)]
-               (when (contains? keys key-text)
-                 (as/>! out-chan (keyword (.toLowerCase key-text)))))))
-    out-chan))
-
-(defn fan-out [in cs-or-n]
-  (let [cs (if (number? cs-or-n)
-             (repeatedly cs-or-n as/chan)
-             cs-or-n)]
-    (as/go (while true
-          (let [x (as/<! in)
-                outs (map #(vector % x) cs)]
-            (as/alts! outs))))
-    cs))
 
 (defn split-key-2-chans
   "Use filter on in chan to relay to one out chan"
