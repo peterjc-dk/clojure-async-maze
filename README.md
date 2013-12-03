@@ -24,10 +24,11 @@ The gameplay is simple, just get the, red dot in the top left corner to the Cloj
  * Use the arrow keys to navigate.
  * press "q" to quit....
 
-The other red dot is just there as a destracion or a opponent. It is possible to both run in day and night mode.
+The other red dot is just there as a distraction or a opponent. It is possible to both run in day and night mode.
+
 
 ## Implementation details
-The main purpose of this app, was for the fun of it, and to play around with clojure, and the clojre core.async librery. In the following I will only focus on the specific async part of the implementation.
+The main purpose of this app, was for the fun of it, and to play around with clojure, and the clojre core.async library. In the following I will only focus on the specific async part of the implementation.
 
 ### Keyboard events
 Getting java Keyboard events is simple using seesaw, this snippet show how it can be done. Where "f" is a java swing frame.
@@ -39,7 +40,9 @@ Getting java Keyboard events is simple using seesaw, this snippet show how it ca
                  (keys/key-pressed-event-2-key-pressed-map e)))))
 
 ```
-For every key pressed the event first get converted to a map the put in a channel. In the other end of this channel is a go routine that pulls event maps out, and filter them to differenent channels as follows
+
+For every key pressed the event first get converted to a map then put in a channel. In the other end of this channel is a go routine that pulls event maps out, and filter them to different channels as follows
+
 
 ```clj
 (defn split-key-2-chans
@@ -60,12 +63,13 @@ For every key pressed the event first get converted to a map the put in a channe
 So when the key-set-list contains  #{"Up" "Down" "Left" "Right"}, all event-maps with :key-text in this set is passed to the same channel converted to keywords :up, :down, :left, :right
 
 ### From actions to moves.
-The actions, now converted to keywords are passed on to a go routine that takes the given maze looks up where that action will get you and passes that on, to the gui updater. Note that
+The actions, now converted to keywords are passed on to a go routine that takes the given maze looks up where that action will get you and passes that on, to the GUI updater. Note that
 
- * It keeps track of the pressent state.
- * The get-new-position returns next state equals pressent state if hitting a wall.
+ * It keeps track of the present state.
+ * The get-new-position returns next state equals present state if hitting a wall.
  * The s/validate is some fancy "type" validation.
- * The timeout is stricly not needed it just makes it run more smooth.
+ * The timeout is strictly not needed it just makes it run more smooth.
+
 
 ```clj
 (defn get-next-state [state a maze]
@@ -100,14 +104,16 @@ The actions, now converted to keywords are passed on to a go routine that takes 
     out-chan))
 ```
 
-The opponent have a simular looking "agent" that also passes state moves to the gui updater routine. The maze is just a array that for each position gives legal moves like [:up :left].
+The opponent have a similar looking "agent" that also passes state moves to the GUI updater routine. The maze is just a array that for each position gives legal moves like [:up :left].
 
-As can easely beem seen the logick of the game is clearly isolated from any gui or Keyboard stuff. Where it is easy to see how a new arrow-key press passes through the code.
+
+As can easily bee seen the logic of the game is clearly isolated from any GUI or Keyboard stuff. Where it is easy to see how a new arrow-key press passes through the code.
 
 ## How to test async code?
-Since this is a relative new concept in the Clojure world, a best pratish for how to write test is a open issue. But most of the heavy lifting can easely be pushed to regular clojure functions that can be tested as usual.
+Since this is a relative new concept in the Clojure world, a best practice for how to write test is a open issue. But most of the heavy lifting can easily be pushed to regular clojure functions that can be tested as usual.
 
-For the above chunck I came up with the following hack(s).
+For the above chunk I came up with the following hack(s).
+
 
 ```clj
 (defn sq-2-chan [sq]
