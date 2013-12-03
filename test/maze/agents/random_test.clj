@@ -11,7 +11,7 @@
   "Start the random agent and make asserts"
   []
   (let [maze (generate/generate-maze [(+ 1 (rand-int 20)) (+ 1 (rand-int 20))])
-        sample-size (rand-int 100)
+        sample-size (rand-int 10)
         board-size  (count (:board maze))
         start-state (rand-int board-size)
         pos-set (set (range board-size))
@@ -28,5 +28,3 @@
 (test/deftest test-random-walker
   (dotimes [n 10]
     (m/fact (try-random) => true)))
-
-

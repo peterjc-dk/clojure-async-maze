@@ -11,7 +11,7 @@
   "Start the arrow agent and make asserts"
   []
   (let [maze (generate/generate-maze [(+ 1 (rand-int 20)) (+ 1 (rand-int 20))])
-        sample-size 100
+        sample-size 10
         board-size  (count (:board maze))
         pos-set (set (range board-size))
         start-state (rand-int board-size)
