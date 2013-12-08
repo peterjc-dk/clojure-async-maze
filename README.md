@@ -22,6 +22,7 @@ or
 
 The gameplay is simple, just get the, red dot in the top left corner to the Clojure logo.
  * Use the arrow keys to navigate.
+ * Or click with the mouse.
  * press "q" to quit....
 
 The other red dot is just there as a distraction or a opponent. It is possible to both run in day and night mode.
@@ -45,22 +46,21 @@ For every key pressed the event first get converted to a map then put in a chann
 
 
 ```clj
-(defn split-key-2-chans
-  "Use filter on in chan to relay to one out chan"
-  [in-chan key-set-list]
-  (let [cs (repeatedly (count key-set-list) as/chan)
-        cs-key-map (map (fn [keys ch] {:keys keys :chan ch}) key-set-list cs)]
+(defn split-keyword-2-chans
+  "Use filter on in chan to relay to out channels"
+  [in-chan keyword-set-list]
+  (let [cs (repeatedly (count keyword-set-list) as/chan)
+        cs-keyword-map (map (fn [keys ch] {:keys keys :chan ch}) keyword-set-list cs)]
     (as/go (while true
-             (let [in-val (as/<! in-chan)
-                   key-text (:key-text in-val)]
-               (doseq [{keys :keys out-chan :chan} cs-key-map]
-                 (when (contains? keys key-text)
-                  (as/>! out-chan (keyword (.toLowerCase key-text))))))))
+             (let [in-val (as/<! in-chan)]
+               (doseq [{keys :keys out-chan :chan} cs-keyword-map]
+                 (when (contains? keys in-val)
+                  (as/>! out-chan in-val))))))
     cs))
 
 ```
 
-So when the key-set-list contains  #{"Up" "Down" "Left" "Right"}, all event-maps with :key-text in this set is passed to the same channel converted to keywords :up, :down, :left, :right
+So when the key-set-list contains  #{:up :down :left :right}, all events in this set is passed to the same channel.
 
 ### From actions to moves.
 The actions, now converted to keywords are passed on to a go routine that takes the given maze looks up where that action will get you and passes that on, to the GUI updater. Note that
