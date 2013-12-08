@@ -63,7 +63,7 @@
         mouse-chan (as/chan)
         columns (:columns maze)
         rows (:rows maze)
-        f (make-frame "The Maze" columns rows (into [] labels))
+        f (make-frame "The Maze" columns rows (vec labels))
         key-handler (fn [e] (as/go
                             (as/>! key-chan
                                    (keys/key-pressed-event-2-key-pressed-map e))))]

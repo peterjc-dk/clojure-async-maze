@@ -12,7 +12,7 @@
                   (println v)
                   (recur))
                 (= ch quit-chan)
-                (do (println "sink stopped")))))))
+                (println "sink stopped"))))))
 
 (defn fn-c [in-c f]
   (let [c (as/chan)]

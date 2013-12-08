@@ -49,17 +49,17 @@
 (defn generate-empty-board
   "given size [columns rows] a empty board is generated"
   [[columns rows]]
-  (into [] (take (* columns rows) (iterate identity []))))
+  (vec (take (* columns rows) (iterate identity []))))
 
 (defn generate-maze
   "given size [columns rows] a maze is generated"
   [[columns rows]]
   (let [empty-board (generate-empty-board [columns rows])
-        start-column (rand-int (- columns 1))
+        start-column (rand-int (dec columns))
         start-row (rand-int rows)
         start-frontier [{:action :right
                         :from [start-column start-row]
-                        :to [(+ 1 start-column) start-row]}]]
+                        :to [(inc start-column) start-row]}]]
     (loop [visited #{[start-column start-row]}
            frontier start-frontier
            board empty-board

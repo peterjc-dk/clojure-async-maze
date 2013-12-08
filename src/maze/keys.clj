@@ -3,9 +3,12 @@
             [clojure.core.async.lab :as as-lab])
   (:import (java.awt.event KeyEvent)))
 
+(defn strLowerCase
+  [^String str]
+  (.toLowerCase str))
 (defn key-pressed-event-2-key-pressed-map
   "Convert a java KeyEvent object to at clojure map"
-  [event]
+  [^KeyEvent event]
   {:key-code (.getKeyCode event)
    :key-char (.getKeyChar event)
    :key-text (KeyEvent/getKeyText (.getKeyCode event))
@@ -16,7 +19,7 @@
   "Given a map representing a event, extract keyword"
   [m]
   (-> (:key-text m)
-      (.toLowerCase)
+      strLowerCase
       keyword))
 
 (defn split-keyword-2-chans

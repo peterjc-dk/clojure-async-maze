@@ -16,10 +16,9 @@
      (loop [state start-state path (rest (:path maze))]
        (let [[v ch] (as/alts! [quit-chan (as/timeout timeout)])]
          (cond (or (empty? path) (= ch quit-chan))
-               (do
-                 (println {:agent :draw-maze
-                            :action :stop
-                            :allert "Drawing maze stopped"}))
+               (println {:agent :draw-maze
+                         :action :stop
+                         :allert "Drawing maze stopped"})
                :else
                (let [new-state (state/position-to-index (first path) [c r])]
                  (when (contains? states new-state)

@@ -10,7 +10,7 @@
 
 (defn scale-icon
   "Given a icon and w,h return a scaled icon "
-  [icon w h]
+  [^javax.swing.ImageIcon icon w h]
   (let [img (.getImage icon)
         smooth java.awt.Image/SCALE_SMOOTH
         scaled-img (.getScaledInstance img w h smooth)]
@@ -21,7 +21,7 @@
 (defn scale-icon-to-label
   "given a label and a icon,
 return a icon scaled to the size of the label"
-  [icon label]
+  [^javax.swing.ImageIcon icon label]
   (let [size (saw/config label :size)
         [w h] [(max 10 (.width size))
                (max 10 (.height size))]]
@@ -29,7 +29,7 @@ return a icon scaled to the size of the label"
 
 (defn change-border-color
   "Given a border return a copy with the color changed"
-  [border color]
+  [^javax.swing.border.Border border color]
   (let [in-sets (.getBorderInsets border)
         col (seesaw.color/color color)]
     (javax.swing.border.MatteBorder. in-sets col)))

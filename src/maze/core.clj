@@ -8,7 +8,6 @@
             [maze.util :as util]
             [maze.agents.left :as agent-left]
             [maze.agents.arrow :as agent-arrow]
-            [maze.agents.mouse_walker :as agent-mouse]
             [clojure.core.async :as as]
             [clojure.core.async.lab :as as-lab])
   (:gen-class))
