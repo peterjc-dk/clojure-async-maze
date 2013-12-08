@@ -144,6 +144,6 @@ It seems like a dirty hack, but it works.
 
 ## License
 
-Copyright © 2013 FIXME
+Copyright © 2013 PJC
 
 Distributed under the Eclipse Public License, the same as Clojure.
