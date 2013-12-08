@@ -92,7 +92,7 @@ return a icon scaled to the size of the label"
         day-night-border-color (if (= day-or-night :night) :red :black)]
     (change-label leave-label agent :leave day-night-border-color)
     (change-label enter-label agent :enter day-night-border-color)
-    (when (= agent :left-walk)
+    #_(when (= agent :left-walk)
       (let [leave-txt (saw/config leave-label :text)
             enter-txt (saw/config enter-label :text)
             leave-val (if (not= leave-txt "") (read-string leave-txt) 0)

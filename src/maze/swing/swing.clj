@@ -49,25 +49,36 @@
              :background :black
              :foreground :black))
 
+(defn label-mouse-handler
+  "Create handler fn to a label"
+  [ch index]
+  (fn [e] (as/go
+          (as/>! ch {:event :mouse-clicked
+                     :tile index} ))))
+
 (defn setup-gui
   "Setup the swing/seasaw gui"
   [maze labels quit-chan]
-  (let [e-chan (as/chan)
+  (let [key-chan (as/chan)
+        mouse-chan (as/chan)
         columns (:columns maze)
         rows (:rows maze)
         f (make-frame "The Maze" columns rows (into [] labels))
         key-handler (fn [e] (as/go
-                            (as/>! e-chan
-                                   (keys/key-pressed-event-2-key-pressed-map e))))
-        mouse-handler (fn [e] (println e))]
+                            (as/>! key-chan
+                                   (keys/key-pressed-event-2-key-pressed-map e))))]
     (saw/listen f :key-pressed key-handler)
-    (saw/listen f :mouse-clicked  key-handler)
+
+    (let [idv (map vector (iterate inc 0) labels)]
+      (doseq [[index label] idv]
+        (saw/listen label :mouse-clicked
+                    (label-mouse-handler mouse-chan index))))
     (saw/show! f)
     (as/go
      (let [[v ch] (as/alts! [quit-chan])]
        (saw/hide! f)
        (saw/dispose! f)))
-    e-chan))
+    [key-chan mouse-chan]))
 
 (defn change-gui
   "Given the labels and a chan with events update gui"

@@ -14,6 +14,12 @@
                 (= ch quit-chan)
                 (do (println "sink stopped")))))))
 
+(defn fn-c [in-c f]
+  (let [c (as/chan)]
+    (as/go (while true
+          (as/>! c (f (as/<! in-c)))))
+    c))
+
 (defn fan-in [ins]
   (let [c (as/chan)]
     (as/go (while true

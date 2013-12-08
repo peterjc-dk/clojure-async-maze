@@ -2,7 +2,7 @@
   (:require [maze.state :as state]
             [maze.generate :as generate]
             [maze.util :as util]
-            [maze.agents.mouse_walker :as mouse]
+            [maze.agents.arrow :as arrow]
             [clojure.core.async :as as]
             [midje.sweet :as m]
             [clojure.test :as test]))
@@ -20,9 +20,9 @@
                          (repeatedly (+ 10 number-of-clicks) (fn [] (rand-int board-size))))
         qc (as/chan)
         in-chan (util/sq-2-chan sample-list)
-        rc (mouse/mouse-to-state in-chan qc maze start-state :night)
+        rc (arrow/arrow-to-state (as/chan) in-chan  qc  maze start-state :user-walker 2)
         ls (util/ch-2-lazy-timeout rc 200)]
-    [(every? #(= :arrow-night-walker %)
+    [(every? #(= :user-walker %)
              (map first (take sample-size ls)))
      (every? #(contains? pos-set %)
              (map second (take sample-size ls)))

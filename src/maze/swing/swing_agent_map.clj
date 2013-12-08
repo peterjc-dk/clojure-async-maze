@@ -22,9 +22,10 @@
 
    :left-walk
    {:enter {:icon (saw-icon/icon
-                   (io/resource "you-are-here-dot.png"))
+                   (io/resource "you-are-here-dot-2.png"))
             :background-color :white}
-    :leave {:icon nil
+    :leave {:icon (saw-icon/icon
+                   (io/resource "dot.png"))
             :background-color :white}}})
 
 (defn agent-action-lookup
